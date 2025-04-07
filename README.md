@@ -11,44 +11,20 @@ This portfolio features projects completed as part of multiple certification pro
 - **Python**, **Bash** — for automation and scripting  
 - **Microsoft Defender**, **Wazuh**, **Suricata**, **Splunk**, **Azure AD** — for threat detection, endpoint security, and cloud IAM  
 - **SQL** — for database security and queries  
-- **SIEM systems** — for security event monitoring and incident response  
+- **SIEM systems** — for security event monitoring and incident response
 
-The portfolio also covers practical case studies in **security operations centers (SOC)**, **incident handling**, **vulnerability management**, and more. Each project includes **detailed documentation**, **code samples**, and **reports** for transparency and reproducibility.
+This portfolio is designed to showcase:
 
----
+- Security risk audits and assessments  
+- Threat analysis and incident response  
+- Network security design and monitoring  
+- Identity and access management using Azure Active Directory  
+- Hands-on use of tools like Wireshark, Nmap, Microsoft Defender, and SQL  
+- Scripting automation tasks using Python  
+- Governance, risk, and compliance strategies  
+- A comprehensive capstone project proposal for securing enterprise infrastructure
 
-## 🔧 Projects
-
-### 📊 **Network Defense & Threat Detection**
-- **Tools Used**: Wireshark, Nmap, Microsoft Defender  
-- **Description**: Conducted network scans, identified vulnerabilities, and implemented detection systems using industry-standard tools.
-
-### 🔐 **Incident Response & Analysis**
-- **Tools Used**: Splunk, Python, Bash  
-- **Description**: Developed and tested incident response workflows, including log parsing and real-time alerting. Automated reporting using Python scripts.
-
-### 🖥️ **Identity & Access Management (IAM) with Azure AD**
-- **Tools Used**: Azure AD, PowerShell  
-- **Description**: Configured identity management solutions and secure user authentication for cloud environments using Azure Active Directory.
-
-### 🛡️ **Vulnerability Assessment & Remediation**
-- **Tools Used**: Nmap, Wireshark, SQL  
-- **Description**: Scanned networks and systems for vulnerabilities, applied security patches, and tested remediation effectiveness.
-
-### 📈 **Governance, Risk & Compliance (GRC)**
-- **Tools Used**: GRC frameworks, Microsoft Defender  
-- **Description**: Created risk management frameworks and compliance assessments for securing business-critical systems and ensuring regulatory compliance.
-
-### ☁️ **Cloud Security Projects**
-- **Tools Used**: Microsoft Azure, AWS, Python  
-- **Description**: Assessed cloud security configurations, implemented best practices for securing cloud infrastructures, and automated monitoring tasks.
-
-### ⚙️ **Penetration Testing with Kali Linux**
-- **Tools Used**: Kali Linux, Metasploit, Burp Suite  
-- **Description**: Performed penetration testing on various systems and web applications using Kali Linux and its associated tools like Metasploit and Burp Suite for vulnerability exploitation.
-
-### 🚀 **Capstone Projects**
-- **Description**: Capstone projects demonstrate the integration of all skills learned, focusing on securing enterprise infrastructure and responding to complex security incidents.
+The portfolio also covers practical case studies in **security operations centers (SOC)**, **incident handling**, **vulnerability management**, and more. Each project includes **documentation**, **screenshots**, **code samples**, and **brief reports** to demonstrate methodology and technical decision-making.
 
 ---
 
