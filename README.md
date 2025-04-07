@@ -76,7 +76,7 @@ The portfolio also covers practical case studies in **security operations center
 
 ## 🧑‍💻 Contact
 
-- LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com/in/ediomobrendan)
+- LinkedIn: [Ediomo Brendan](https://linkedin.com/in/ediomobrendan)
 - Email: brendanediomo@gmail.com
 
 Feel free to reach out if you have any questions or would like to discuss cybersecurity trends, methodologies, or career opportunities.
