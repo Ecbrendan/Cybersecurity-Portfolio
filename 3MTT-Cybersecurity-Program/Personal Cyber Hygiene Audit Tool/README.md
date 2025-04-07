@@ -8,8 +8,11 @@ This project was created as part of the **3MTT Cybersecurity Program**
 
 ## 📂 Portfolio Context
 Category: 3MTT Cybersecurity Program
+
 Track: Security Awareness and Training
+
 Project Type: Mini Self-Audit Tool
+
 Tool Purpose: Educate users and help enforce proactive personal cybersecurity habits.
 
 ---
