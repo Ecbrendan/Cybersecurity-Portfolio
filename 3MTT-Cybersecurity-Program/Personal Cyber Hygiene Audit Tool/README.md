@@ -49,9 +49,13 @@ The script asks a series of questions (1-3 scale: 1 = Good, 3 = Poor), calculate
 - Python 3. installed
 
 ### Run the Tool
-git clone https://github.com/yourusername/personal-cyber-hygiene-audit.git
+clone the repository
+
+run the script:
+
 cd personal-cyber-hygiene-audit
+
 python cyber_hygiene_audit.py
 
-
+follow the prompts and answer each question honestly
 
