@@ -1,4 +1,4 @@
-# ShieldGuard Research Initiative: Equifax Data Breach Analysis (2017)
+# Equifax Data Breach Analysis (2017)
 
 ## 📌 Project Objective
 
@@ -27,6 +27,7 @@ The analysis centers on the **Equifax Data Breach of 2017**, one of the most dam
 
 ## 📚 References
 
-- Federal Trade Commission (FTC), 2019 [Link](https://www.ftc.gov/news-events/news/press-releases/2019/07/equifax-pay-575-million-part-settlement-ftc-cfpb-states-related-2017-data-breach)
-- New York Times, 2017 [Link](https://www.nytimes.com/2017/09/08/business/equifax.html)
+- Federal Trade Commission (FTC), 2019: [Link](https://www.ftc.gov/news-events/news/press-releases/2019/07/equifax-pay-575-million-part-settlement-ftc-cfpb-states-related-2017-data-breach)
+- New York Times, 2017: [Link](https://www.nytimes.com/2017/09/08/business/equifax.html)
+- United States House Committee on Oversight and Accountability: [Link](https://oversight.house.gov/wp-content/uploads/2018/12/Equifax-Report.pdf)
 
