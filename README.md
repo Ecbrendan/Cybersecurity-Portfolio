@@ -50,6 +50,12 @@ The portfolio also covers practical case studies in **security operations center
 
 ---
 
+### 🧼 Personal Cyber Hygiene Audit Tool
+🔗 [GitHub Repo](https://github.com/Ecbrendan/Cybersecurity-Portfolio/tree/main/3MTT-Cybersecurity-Program/Personal%20Cyber%20Hygiene%20Audit%20Tool)  
+📄 A self-assessment Python tool for evaluating personal cybersecurity habits, generating scores, and tailored recommendations. Created as part of 3MTT Cybersecurity training.
+
+---
+
 ## 🧑‍💻 Contact
 
 - LinkedIn: [Ediomo Brendan](https://linkedin.com/in/ediomobrendan)
