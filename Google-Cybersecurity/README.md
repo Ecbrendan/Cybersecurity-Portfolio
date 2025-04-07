@@ -1,4 +1,4 @@
-# 🔍 Google Cybersecurity Professional Certificate – Portfolio
+# 🛡️ Google Cybersecurity Professional Certificate – Portfolio
 
 This repository showcases projects and assessments completed as part of the **Google Cybersecurity Professional Certificate** on Coursera. This program is designed to equip learners with the necessary skills for entry-level cybersecurity roles.
 
