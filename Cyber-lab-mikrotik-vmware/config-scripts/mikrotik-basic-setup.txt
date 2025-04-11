@@ -1,4 +1,0 @@
-/ip address add address=192.168.10.1/24 interface=ether2
-/ip dhcp-client add interface=ether1 disabled=no
-/ip dhcp-server setup
-/ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
