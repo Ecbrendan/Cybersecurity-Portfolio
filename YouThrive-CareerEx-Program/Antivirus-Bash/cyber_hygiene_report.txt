@@ -1,0 +1,8 @@
+Cyber Hygiene Audit Report
+Score: 26/30 (86.7%)
+Level: Excellent
+
+Recommendations:
+- Consider improving: Do you review your privacy settings regularly.
+- Consider improving: Do you check sender email addresses and hover over links.
+- Urgent: Do you back up your data regularly needs attention.

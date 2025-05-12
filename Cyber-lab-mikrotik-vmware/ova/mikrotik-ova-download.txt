@@ -1,2 +1,0 @@
-Download Mikrotik CHR OVA (7.18.2):
-https://download.mikrotik.com/routeros/7.18.2/chr-7.18.2.ova
