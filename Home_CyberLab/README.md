@@ -37,17 +37,8 @@ This homelab is designed to:
 ---
 
 ## 🗺️ Network Overview
+![image](https://github.com/user-attachments/assets/b15bd8db-ce0a-45b3-9aaf-1b5b7465f1c0)
 
-[Internet]
-    │
-[MikroTik Router]
-    │
-[VM Network Bridge]
-    ├── Windows Server (AD, DHCP, DNS)
-    ├── Windows Clients (x2)
-    ├── Kali Linux
-    └── macOS
----
 
 ## 📦 Lab Features
 
