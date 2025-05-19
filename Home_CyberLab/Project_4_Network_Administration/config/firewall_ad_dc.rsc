@@ -23,10 +23,6 @@ add chain=forward action=accept protocol=tcp dst-port=636 dst-address=192.168.10
 add chain=forward action=accept protocol=udp dst-port=636 dst-address=192.168.10.10 comment="✅ Allow LDAPS UDP (if needed)"
 add chain=forward action=accept protocol=tcp dst-port=3268 dst-address=192.168.10.10 comment="✅ Allow Global Catalog"
 
-# ------------------------------
-# 🛡️ FUTURE SERVICES – EXPANSION
-# ------------------------------
-
 # 🔐 RADIUS (for NPS/802.1X)
 add chain=forward action=accept protocol=udp dst-port=1812 dst-address=192.168.10.10 comment="🔐 Allow RADIUS Auth (UDP 1812)"
 add chain=forward action=accept protocol=udp dst-port=1813 dst-address=192.168.10.10 comment="🔐 Allow RADIUS Accounting (UDP 1813)"
