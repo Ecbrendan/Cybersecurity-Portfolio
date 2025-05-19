@@ -62,5 +62,9 @@ This homelab is designed to:
 ---
 
 👨‍💻 Maintainer
+
 Ediomo Brendan
+
 Cybersecurity Analyst
+
+🔗 Connect with me on [LinkedIn](https://www.linkedin.com/in/ediomobrendan)
