@@ -1,7 +1,7 @@
 # ================================================
 # ⚙️  LAB FIREWALL CONFIG - AD/DC CORE + EXPANDED
 # Target: Windows Server (AD/DC) - 192.168.10.10
-# Author: <Your Name>
+# Author: Ediomo Brendan
 # Description: Enables required services for AD, DNS, DHCP, GPO, RADIUS, RDP, PKI
 # ================================================
 
