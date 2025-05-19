@@ -1,0 +1,150 @@
+Setup and guide for Active Directory Optimization, covering:
+
+Creating Organizational Units (OUs)
+
+Implementing Group Policy Objects (GPOs) for:
+
+Password complexity
+
+Login banners
+
+Software restriction policies
+
+1: Create Proper OUs
+✅ Objective: Organize Active Directory into logical units for easier management and GPO targeting.
+
+🔧 Steps:
+
+Log in to your Domain Controller (Windows Server 2022) as a domain admin.
+
+Open Server Manager → Click Tools → Open Active Directory Users and Computers (ADUC).
+
+In the left pane, right-click your domain name (e.g deelabserver.com) → Select New → Organizational Unit.
+
+Create the following OUs one after the other:
+
+- Workstations
+
+- Servers
+
+- Users
+
+- Guests
+
+Move existing domain-joined computers and user accounts into appropriate OUs:
+
+- Move domain-joined Windows clients to Workstations
+
+- Move the Domain Controller to Servers
+
+- Move users into Users or Guests depending on roles
+
+2: Group Policy – Enforce Password Complexity
+✅ Objective: Ensure strong password policies are enforced domain-wide.
+
+🔧 Steps:
+
+Open Group Policy Management:
+Server Manager → Tools → Group Policy Management
+
+Right-click the Default Domain Policy under your domain → Click Edit.
+
+In the GPO Editor:
+
+Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Password Policy
+
+Enforce password history: 24 passwords remembered
+
+Maximum password age: 90 days (or lower for stricter rotation)
+
+Minimum password length: 8
+
+Password must meet complexity requirements: Enabled
+
+Close the editor. The policy will apply at the domain level.
+
+3: Group Policy – Configure Login Banner
+✅ Objective: Display a legal or warning message before users log in.
+
+🔧 Steps:
+In Group Policy Management, right-click the OU (e.g., Users) → Create a New GPO named Login Banner Policy.
+
+Right-click the new GPO → Click Edit.
+
+Navigate to:
+
+Computer Configuration → Policies → Windows Settings → Security Settings → Local Policies → Security Options
+
+Set:
+
+Interactive logon: Message title for users attempting to log on → WARNING: Authorized Users Only
+
+Interactive logon: Message text for users attempting to log on → This system is for the use of authorized individuals only. Unauthorized access or use is prohibited and may be subject to disciplinary or legal action.
+
+Link this GPO to the Users OU (or the whole domain if you want it everywhere).
+
+4: Group Policy – Software Restriction Policies
+✅ Objective: Prevent users from running unauthorized programs (e.g., .exe from USBs or Downloads).
+
+🔧 Steps:
+In Group Policy Management, right-click the Workstations OU → Create a GPO named Software Restriction Policy.
+
+Edit the GPO → Navigate to:
+
+Computer Configuration → Policies → Windows Settings → Security Settings → Software Restriction Policies
+Right-click Software Restriction Policies → New Software Restriction Policies.
+
+Set the Security Level:
+
+Right-click Disallowed → Set as Default
+
+Create New Path Rules to allow trusted paths, such as:
+
+C:\Program Files\* → Security Level: Unrestricted
+
+C:\Windows\* → Unrestricted
+
+\\domaincontroller\netlogon\* → Unrestricted (optional, for login scripts)
+
+You may add:
+
+%HOMEPATH%\Downloads\* → Disallowed
+
+%USERPROFILE%\AppData\* → Disallowed
+
+Link this GPO to the Workstations OU.
+
+Note that this could disable some systems apps.
+
+
+In Group Policy Management, right-click the Workstations OU → Create a GPO named Software Restriction Policy.
+
+Edit the GPO → Navigate to:
+
+Computer Configuration → Administrative Templates → System → Removeable Storage Access.
+
+Select removeable storage access in the left pane. In the right pane, double click and enable the following:
+
+	i. Removeable Disk: Deny execute access
+	ii. Removeable Disk: Deny read access
+	iii. Removeable Disk: Deny write access
+
+ 
+
+🔄 Force GPO Update and Test
+✅ Objective: Apply and verify GPO effectiveness.
+
+🔧 Steps:
+On any client or server machine, run:
+
+gpupdate /force
+
+Reboot or log off/log on to test if
+
+- Login banner is shown
+
+- Password rules enforced when changing passwords
+
+- Unauthorized apps fail to run from Downloads or USB
+
+- Removeable drive is restricted from executing on the system.
