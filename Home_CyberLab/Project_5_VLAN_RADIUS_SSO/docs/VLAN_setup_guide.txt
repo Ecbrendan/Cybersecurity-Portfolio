@@ -1,0 +1,193 @@
+🎯 Goal: Use a Windows Server DHCP in 192.168.10.0/24 to serve IP addresses to devices in 192.168.20.0/24, using a MikroTik router and two VMnet adapters in VMware.
+
+
+NETWORK OVERVIEW
+Network Segment		Subnet			VMnet	MikroTik Interface	Gateway IP
+VLAN10 (Server)		192.168.10.0/24		VMnet2		ether2		192.168.10.1
+VLAN20 (Clients)	192.168.20.0/24		VMnet3		ether3		192.168.20.1
+
+
+
+Assign Static IPs on MikroTik Interfaces
+
+Log in to MikroTik WebFig
+
+Go to IP > Addresses
+
+Assign the following:
+
+Interface	IP Address	Network
+ether2		192.168.10.1/24	192.168.10.0/24
+ether3		192.168.20.1/24	192.168.20.0/24
+
+
+Set Up DHCP Relay on MikroTik
+Go to IP > DHCP Relay
+
+Click Add New
+
+Fill in:
+
+Field	Value
+Name	relay_vlan20
+Interface	ether3
+DHCP Server	192.168.10.10 (Your Windows Server IP)
+Local Address	192.168.20.1 (Interface IP of ether3)
+
+This tells MikroTik to forward DHCP broadcasts from VLAN20 to your Windows Server.
+
+Configure DHCP Scope on Windows Server
+
+Open Server Manager > Tools > DHCP
+
+Expand your server > IPv4
+
+Right-click and choose New Scope
+
+Name: VLAN20 Scope
+
+Set the following:
+
+Setting	Value
+IP Range		192.168.20.100 - 200
+Subnet Mask		255.255.255.0
+Router (Gateway)	192.168.20.1
+DNS Server		Your AD Server IP
+Activate Scope	 	Yes
+
+Ensure the DHCP server has the 192.168.10.10 address on the interface connected to VMnet2.
+
+
+Connect Devices
+
+Windows Server: Connect to VMnet2
+
+Kali & macOS Clients: Connect to VMnet3
+
+Reboot clients 
+
+Verify DHCP Relay Is Working
+
+On Windows Server DHCP console:
+
+There should be leases assigned under the VLAN20 scope
+
+
+Allow VLAN10 & VLAN20 to Communicate
+
+In MikroTik WebFig:
+
+Go to IP > Firewall > Filter Rules
+
+Allow inter-subnet traffic:
+
+Chain: forward
+Src. Address: 192.168.20.0/24
+Dst. Address: 192.168.10.0/24
+Action: accept
+
+
+Chain: forward
+Src. Address: 192.168.10.0/24
+Dst. Address: 192.168.20.0/24
+Action: accept
+
+Test Connectivity
+
+Ping from Kali (192.168.20.x) to Windows Server (192.168.10.10)
+
+Ping from Windows Server to Kali.
+
+
+
+🎯 Goal - Set up SSO and AAA using RADIUS (NPS + AD) to authenticate MikroTik admin logins via Active Directory credentials.
+
+
+1: Install NPS Role on Windows Server
+Open Server Manager > Manage > Add Roles and Features
+
+Install:
+
+Network Policy and Access Services
+
+Include Network Policy Server (NPS)
+
+
+2: Register NPS in Active Directory
+Open NPS (from Tools menu)
+
+Right-click NPS (Local) → Register server in Active Directory
+
+Confirm registration
+
+
+3: Add MikroTik as a RADIUS Client in NPS
+In NPS Console, go to RADIUS Clients and Servers > RADIUS Clients
+
+Right-click > New
+
+Fill in:
+
+Field	Value
+Friendly Name		MikroTik
+Address (IP)		192.168.10.1 (MikroTik IP)
+Shared Secret		your password
+Vendor			RADIUS Standard
+
+
+4: Create a New Network Policy in NPS (for VPN & Login)
+Go to Policies > Network Policies
+
+Right-click > New
+
+Name: MikroTik Auth
+
+Conditions:
+Click Add > Windows Groups → Select the AD group (e.g. Domain Administrators)
+
+Constraints:
+Authentication Method: MS-CHAPv2
+
+Settings:
+Leave defaults (or optionally configure IP filters)
+
+Click Finish
+
+
+
+5: Configure MikroTik to Use RADIUS (Admin Login)
+🔹 A. Go to System > Users > AAA
+
+Enable Use RADIUS
+
+Check:
+
+Login
+
+PPP
+
+Click Apply
+
+🔹 B. Go to RADIUS Settings
+Go to Radius > Add New
+
+Field		Value
+Service	login, 	ppp
+Address		192.168.10.10 (NPS IP)
+Secret		password created
+Auth Port	1812
+Timeout		3000 ms
+Protocol	pap or mschap2
+
+Click Apply
+
+8: Test Admin Login Authentication to MikroTik
+Try logging in via:
+
+WebFig
+
+Winbox
+
+SSH
+
+Use an AD account that belongs to the NPS allowed group (Domain Admins)
