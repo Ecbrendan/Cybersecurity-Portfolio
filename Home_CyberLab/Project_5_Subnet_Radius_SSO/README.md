@@ -1,13 +1,13 @@
 # 🎯 MikroTik DHCP Relay & RADIUS Authentication Lab
 
-This lab simulates a production-style setup where a centralized Windows Server DHCP allocates IP addresses across VLANs, and MikroTik RouterOS uses RADIUS authentication (via NPS + Active Directory) for admin logins.
+This lab simulates a production-style setup where a centralized Windows Server DHCP allocates IP addresses across Subnets, and MikroTik RouterOS uses RADIUS authentication (via NPS + Active Directory) for admin logins.
 
 ## 📡 Network Overview
 
 | Segment         | Subnet            | VMnet   | MikroTik Interface  | Gateway IP     |
 |-----------------|-------------------|---------|---------------------|----------------|
-| VLAN10 (Server) | 192.168.10.0/24   | VMnet2  | ether2              | 192.168.10.1   |
-| VLAN20 (Client) | 192.168.20.0/24   | VMnet3  | ether3              | 192.168.20.1   |
+| Subnet10 (Server) | 192.168.10.0/24   | VMnet2  | ether2              | 192.168.10.1   |
+| Subnet20 (Client) | 192.168.20.0/24   | VMnet3  | ether3              | 192.168.20.1   |
 
 - DHCP Server IP: `192.168.10.10`
 - Clients (Kali/macOS) on VMnet3 receive IPs via DHCP relay.
@@ -20,7 +20,7 @@ This lab simulates a production-style setup where a centralized Windows Server D
 ### ✅ DHCP Relay from MikroTik to Windows Server
 
 - MikroTik relays DHCP requests to `192.168.10.10`
-- Windows Server handles DHCP Scope for VLAN20:
+- Windows Server handles DHCP Scope for Subnet20:
   - **Range:** 192.168.20.50–100
   - **Router:** 192.168.20.1
   - **DNS:** AD server
@@ -46,9 +46,9 @@ This lab simulates a production-style setup where a centralized Windows Server D
 
 ## 🧪 Verification Steps
 
-- ✅ Devices on VLAN20 receive IPs from Server
+- ✅ Devices on Subnet20 receive IPs from Server
 - ✅ RADIUS-authenticated login works on MikroTik (WebFig, Winbox, SSH)
-- ✅ Inter-VLAN communication succeeds with firewall rules
+- ✅ Inter-Subnet communication succeeds with firewall rules
 - ✅ Windows Server is domain-joined and handles DHCP + NPS roles
 
 ---

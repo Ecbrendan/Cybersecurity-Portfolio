@@ -3,8 +3,8 @@
 
 NETWORK OVERVIEW
 Network Segment		Subnet			VMnet	MikroTik Interface	Gateway IP
-VLAN10 (Server)		192.168.10.0/24		VMnet2		ether2		192.168.10.1
-VLAN20 (Clients)	192.168.20.0/24		VMnet3		ether3		192.168.20.1
+Subnet10 (Server)	192.168.10.0/24		VMnet2		ether2		192.168.10.1
+Subnet20 (Clients)	192.168.20.0/24		VMnet3		ether3		192.168.20.1
 
 
 
@@ -29,12 +29,12 @@ Click Add New
 Fill in:
 
 Field	Value
-Name	relay_vlan20
+Name	relay_subnet20
 Interface	ether3
 DHCP Server	192.168.10.10 (Your Windows Server IP)
 Local Address	192.168.20.1 (Interface IP of ether3)
 
-This tells MikroTik to forward DHCP broadcasts from VLAN20 to your Windows Server.
+This tells MikroTik to forward DHCP broadcasts from subnet20 to your Windows Server.
 
 Configure DHCP Scope on Windows Server
 
@@ -44,7 +44,7 @@ Expand your server > IPv4
 
 Right-click and choose New Scope
 
-Name: VLAN20 Scope
+Name: SUBNET20 Scope
 
 Set the following:
 
@@ -73,7 +73,7 @@ On Windows Server DHCP console:
 There should be leases assigned under the VLAN20 scope
 
 
-Allow VLAN10 & VLAN20 to Communicate
+Allow SUBNET10 & SUBNET20 to Communicate
 
 In MikroTik WebFig:
 

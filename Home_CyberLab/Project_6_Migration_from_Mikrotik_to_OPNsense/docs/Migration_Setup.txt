@@ -1,0 +1,218 @@
+Goal: Replace MikroTik with OPNsense
+
+Network Architecture with OPNsense
+
+- All devices route through OPNsense
+
+- OPNsense relays DHCP to Windows Server
+
+- OPNsense acts as a bridge between Subnets
+
+- OPNsense enforces firewall policies
+
+
+Step-by-Step Migration Plan
+
+1. Prepare and install the OPNsense VM
+vNIC	VMware Network	Purpose				OPNsense Name		IP / Mask
+1	Bridge 		ISP-facing bridged		WAN			WAN	DHCP
+2	VMnet2		192.168.10.0/24 segment		LAN			192.168.10.1 /24
+3	VMnet3		192.168.20.0/24 segment		OPT1			192.168.20.1 /24
+
+
+After the installer reboots, log in at the console with (installer/opnsense) and install to disk 
+After reboot login with (root/opnsense) and run Option 1 to assign these interfaces.
+
+
+2. Web-GUI initialisation
+
+Browse to https://192.168.10.1 (default LAN IP) → log in (root / opnsense)
+
+System → Wizard
+
+Change the root password
+
+Enter hostname, DNS, and time-zone (Africa/Lagos)
+
+Interfaces → LAN
+
+Confirm Static IPv4 = 192.168.10.1/24 → Save → Apply
+
+Interfaces → OPT1
+
+Tick Enable
+
+Static IPv4 = 192.168.20.1/24
+
+No DHCP (Windows Server will supply) → Save → Apply
+
+3. Set up DHCP Relay to Windows Server (192.168.10.10)
+Services → DHCRelay
+
+Create Destination servers: Name: Windows Server, Address: 192.168.10.10
+
+Create Relay, 
+Tick: enable
+Interface: OPT1
+Destination: Windows Server
+Save → Apply
+
+Windows Server checklist (This is already configured in the previous project)
+
+Two active scopes:
+
+192.168.10.0/24 – Router option 003 = 192.168.10.1
+
+192.168.20.0/24 – Router option 003 = 192.168.20.1
+
+Authorised in AD DS
+
+DHCP service running
+
+4. Outbound NAT (internet access)
+Firewall → NAT → Outbound
+
+Select Automatic (includes both internal subnets)
+
+Save → Apply
+
+5. Base firewall rules
+
+LAN
+Rule 1  Allow  *  LAN net → any   (this is created by default)
+
+OPT1 (copy of LAN rule so those clients can get online)
+Rule 1  Allow  *  OPT1 net → any
+
+This can later be tighten to our taste.
+
+6. DNS behavior (This was achieved in step 2 when we configured hostname, DNS, and time-zone)
+If Windows Server (192.168.10.10) is already the DNS for your domain, point OPNsense to it:
+
+System → Settings → General → DNS Servers: 192.168.10.10
+
+Services → Unbound DNS → General: disable Enable DNS Resolver (or leave enabled but add 192.168.10.10 as an upstream).
+
+Make sure both DHCP scopes hand out DNS = 192.168.10.10.
+
+
+7. Testing matrix
+
+Test	
+
+- Ping 192.168.10.1 from a 10-network client	
+- Ping 192.168.20.1 from a 20-network client	
+- ipconfig /renew on 20-network client
+- nslookup www.google.com on any client
+- Browse to the internet from both networks
+
+
+Goal:
+Allow domain users to authenticate through OPNsense using RADIUS (Windows NPS), just like before.
+
+1. Ensure Windows NPS is Configured
+We’ve already done this on your Windows Server 2022. Confirm:
+
+✅ NPS Configuration Recap
+NPS Role installed
+
+A RADIUS client (MikroTik) was added before — now replace it with OPNsense
+
+Connection Request Policy & Network Policy are in place
+
+Server has shared secret defined - Radiuslab
+
+- If this hasn't been done or you are building with OPNsense directly for the first time
+
+Configure NPS (Windows Server)
+
+Step 1: Add RADIUS Client
+
+Open Network Policy Server
+
+Right-click RADIUS Clients → New
+
+Friendly name: OPNsense
+
+Address: 192.168.10.1 (OPNsense LAN IP)
+
+Shared secret: e.g., Radiuslab
+
+
+Step 2: Create a Connection Request Policy
+
+Go to Policies → Connection Request Policies
+
+Right-click → New
+
+Name: OPNsense Login
+
+Conditions: Client Friendly Name = OPNsense
+
+Authentication: Authenticate requests on this server
+
+Step 3: Create a Network Policy
+
+Go to Policies → Network Policies
+
+Right-click → New
+
+Name: OPNsense Admin Login
+
+Conditions:
+
+Windows Groups: Add your OPNsenseAdmins group
+
+Grant access: ✅ Allow
+
+Authentication methods: PAP (OPNsense only supports PAP for GUI)
+
+Constraints: Uncheck MS-CHAPv2, leave PAP
+
+Click Ok
+
+
+On OPNsense
+
+1. Create a RADIUS Authentication Server on OPNsense
+
+Go to: System → Access → Servers → Add
+
+Field			Value
+Type			RADIUS
+Name			Windows-NPS
+Hostname or IP Address	192.168.10.10
+Authentication Port	1812
+Accounting Port		1813
+Shared Secret		Radiuslab
+Scope			Authentication and Accounting
+Default groups		Admins 	
+Automatic user creation	Check
+Protocol		PAP
+Save	✅
+
+2. Add RADIUS to the Authentication Sources
+
+Go to: System → Settings → Administration
+
+Under Authentication Server:
+
+Choose: Local Database + Windows-NPS
+
+Sudo: 	Ask password 	
+
+Click Save
+
+✅ Done: 
+
+3. Test Web Login with RADIUS
+
+Open a browser → https://192.168.10.1
+
+Login as: domainuser
+
+Password: your domain password
+
+✅ You should now have full web UI access.
+
+Now, members of the AD group can log into OPNsense with their domain credentials.
