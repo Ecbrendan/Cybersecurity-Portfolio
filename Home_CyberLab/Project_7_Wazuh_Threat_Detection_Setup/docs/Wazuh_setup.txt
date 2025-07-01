@@ -1,0 +1,125 @@
+Deploy Wazuh Server (on Ubuntu VM)
+
+1.1. Create Ubuntu VM in VMware
+OS: Ubuntu 22.04 LTS
+
+Assign static IP (e.g., 192.168.10.20)
+
+Hostname: ubuntu
+
+Update the system:
+
+sudo apt update && sudo apt upgrade -y
+
+
+2. Install Wazuh (Manager + Dashboard + Filebeat) on Ubuntu
+
+- For this lab, I am using the latest version of Wazuh which is currently 4.12. 
+
+- I'll be installing using the assisted installation method and as a single node.
+
+- This steps may differ for other versions. and you can please following the steps provided on the site.  
+
+Go to https://documentation.wazuh.com/current/installation-guide/wazuh-indexer/index.html.
+
+
+2.1 Wazuh indexer cluster installation
+
+Create a directory and open it. 
+
+mkdir Wazuh 
+cd Wazuh
+
+2.1.1 Download the Wazuh installation assistant and the configuration file.
+
+curl -sO https://packages.wazuh.com/4.12/wazuh-install.sh
+curl -sO https://packages.wazuh.com/4.12/config.yml
+
+2.1.2 Edit ./config.yml and replace the node names and IP values with the corresponding names and IP addresses.
+
+nodes:
+  # Wazuh indexer nodes
+  indexer:
+    - name: node-1
+      ip: "192.168.10.20"
+    #- name: node-2
+    #  ip: "<indexer-node-ip>"
+    #- name: node-3
+    #  ip: "<indexer-node-ip>"
+
+  # Wazuh server nodes
+  # If there is more than one Wazuh server
+  # node, each one must have a node_type
+  server:
+    - name: wazuh-1
+      ip: "192.168.10.20"
+    #  node_type: master
+    #- name: wazuh-2
+    #  ip: "<wazuh-manager-ip>"
+    #  node_type: worker
+    #- name: wazuh-3
+    #  ip: "<wazuh-manager-ip>"
+    #  node_type: worker
+
+  # Wazuh dashboard nodes
+  dashboard:
+    - name: dashboard
+      ip: "12.168.10.20"
+
+2.1.3 Run the Wazuh installation assistant with the option --generate-config-files to generate the Wazuh cluster key, certificates, and passwords necessary for installation.
+
+bash wazuh-install.sh --generate-config-files
+
+2.1.4 Run the Wazuh installation assistant with the option --wazuh-indexer and the node name to install and configure the Wazuh indexer. The node name must be the same one used in config.yml
+
+bash wazuh-install.sh --wazuh-indexer node-1
+
+2.1.5 Run the Wazuh installation assistant with option --start-cluster on any Wazuh indexer node to load the new certificates information and start the cluster.
+
+bash wazuh-install.sh --start-cluster
+
+2.1.6 Testing the cluster installation
+Run the following command to get the admin password:
+
+tar -axf wazuh-install-files.tar wazuh-install-files/wazuh-passwords.txt -O | grep -P "\'admin\'" -A 1
+
+2.1.7 Run the following command to confirm that the installation is successful. Replace <ADMIN_PASSWORD> with the password gotten from the output of the previous command. Replace <WAZUH_INDEXER_IP> with the configured Wazuh indexer IP address:
+
+curl -k -u admin:<ADMIN_PASSWORD> https://<WAZUH_INDEXER_IP>:9200
+
+2.1.8 Replace <WAZUH_INDEXER_IP> and <ADMIN_PASSWORD>, and run the following command to check if the cluster is working correctly:
+
+curl -k -u admin:<ADMIN_PASSWORD> https://<WAZUH_INDEXER_IP>:9200/_cat/nodes?v
+
+The Wazuh indexer is now successfully installed.
+
+2.2.1 Run the Wazuh installation assistant with the option --wazuh-server followed by the node name to install the Wazuh server. The node name must be the same one used in config.yml
+
+bash wazuh-install.sh --wazuh-server wazuh-1
+
+2.3.1 Run the Wazuh installation assistant with the option --wazuh-dashboard and the node name to install and configure the Wazuh dashboard. The node name must be the same one used in config.yml
+
+bash wazuh-install.sh --wazuh-dashboard dashboard
+
+Once the Wazuh installation is completed, the output shows the access credentials and a message that confirms that the installation was successful.
+
+
+INFO: --- Summary ---
+INFO: You can access the web interface https://<WAZUH_DASHBOARD_IP_ADDRESS>
+   User: admin
+   Password: <ADMIN_PASSWORD>
+
+INFO: Installation finished.
+
+You can login with the Wazuh IP address, admin and password. 
+
+3.1 To deploy a new agent on Linux. 
+- Agent Management - Summary - Deploy new agent. 
+- Select Device operating system e.g Kali is DEB amd64 
+- Assign server address 192.168.10.20
+- Run the command generated with admin privileges on the Kali to install the agent 
+e.g wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.12.0-1_amd64.deb && sudo WAZUH_MANAGER='192.168.10.20' dpkg -i ./wazuh-agent_4.12.0-1_amd64.deb
+- Run the command to start the service
+e.g sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
